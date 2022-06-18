@@ -1,0 +1,73 @@
+ # Ruby 上級テクニックを学んでいく
+
+学ぼうと思ったきっかけは、下記のパイザの問題を自力で解いたところ力技になってしまったため、もっとスマートん来ときたいと思ったから。
+
+ [問題文リンク](https://paiza.jp/works/mondai/steinsgate/restore_command_boss?language_uid=c)<br>
+解答コード
+ ```
+n,_,l=gets.split.map &:to_i
+a=n.times.map{gets.split.map &:to_i}
+p *l.times.map{
+    gets.split.map &:to_i
+}.each_cons(2).map{|x,y|
+    z=y.zip(x).map{|a,b|a-b}
+    a.index(z)+1
+}
+
+```
+入力値
+```
+3 3 4
+-8 7 6
+-5 0 -1
+3 6 -9
+6 -10 -1
+9 -4 -10
+1 3 -4
+4 9 -13
+```
+出力結果(答え)
+```
+3
+1
+3
+```
+
+このコードみたいにスマートにパイザの問題を解いていくために、１つずつ何をやっているのか紐解いていく。
+
+## 変数のアンダーバー
+Rubyでは、文法上は_も有効な変数名ですが、慣習的に「いらないけど変数で受ける必要がある場面で使う変数名」となっています（よりわかりやすく、_keyや_restのように具体的に付けることもあります）。<br>
+```
+foo = 'one,two,three,four,five'
+*beginning, something, _ = foo.split(',')
+```
+なお、```first, *_ = foo.split(',')```は、```first, = foo.split(',')```と書いても動作は同じです（慣習どおり、_を使わない場合）。あと、```*beginning, something, _```の方は、「最後1つを捨てて、その手前をsomethingに、残りをbeginningに入れる」という意味になります。
+
+## times.mapとは
+まずは此のコードを見よう。
+```
+result = 10.times.map do |i|
+  i * 10
+end
+
+# [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+```
+なんと、times.mapを使って配列を生成しているのだ。
+ちなみに、上記のコードは下記の普段どおりの書き方にも変更して問題ない。
+```
+result = 10.times.map{|i| i * 10}
+```
+いろんな記事を見ても、times.mapがなぜ配列が生成できるのか...<br>
+というか、mapメソッドって配列かhashにしか使えないって思ってた。
+</br><br>
+さらに調べていくと、Enumerableモジュールというワードが鍵になっているっぽい。<br>
+このブログが役に立ちそう => [リンク](https://bagelee.com/programming/ruby-on-rails/ruby-enumerable/)
+
+<br>
+
+>Enumerableモジュールとは繰り返し処理を行うためのモジュールで、モジュール内のメソッドは全て each を使って定義されています。eachはArrayやHash、RangeなどEnumerableモジュールをインクルードしている各クラスで定義されており、eachを用いてEnumerableモジュールに定義されているメソッドを使うことができるという関係性にあります。
+
+
+
+
+
