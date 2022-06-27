@@ -49,6 +49,41 @@ yieldがない場合は、ブロック内で.callで実行される。<br>
 yieldがある場合は、callなしで実行される且つ引数に```&sample_proc```みたいに、procを渡していることを明示的にしなくて良くなる。<br>
 yieldが記述されているから暗黙の了解らしい。
 
+## ちょっとつかってみた
 
+```
+proc = Proc.new{|x| x.map{|y|p y.concat('さん')}}
+proc.call(['はなおか','さいとう','こうさか'])
 
+```
 
+procを生成して、callで配列を渡しながら読んでみた。<br>
+最初のprocのブロック変数xには```['はなおか','さいとう','こうさか']```この状態で入ってくる。そのため、配列の要素それぞれになにかしたい場合は、map等のメソッドをチェーンして使用する。
+
+## ブロックへの変換
+```
+def func x
+    x + yield
+end
+
+proc = Proc.new{2}
+func(1,&proc)
+#=> 3
+```
+※procを変数として渡す際には&をつけるっぽい<br>
+上記のような使い方もできる。
+
+https://qiita.com/kidach1/items/15cfee9ec66804c3afd2
+この記事めっちゃ良い
+```
+#メソッド定義
+def give_me_block( &block )
+  block.call
+end
+
+#実行
+give_me_block do
+  p "Hello, block!"
+end
+=> "Hello, block!"
+```
