@@ -55,3 +55,46 @@ end
 # クラスがモジュールをインクルードしている状態で、ancestorsメソッドで
 # 継承チェーンを調べるとモジュールクラスも含まれて入るが、Superclassメソッドでは、
 # 存在しないことになっている。
+
+# メソッドの優先度(モジュール)
+module M1
+    def method1; 1; end
+end
+
+class C1
+    def method1; 2; end
+    include M1
+end
+# モジュールは継承チェーンに挿入されるが、クラス内のメソッドの方が優先
+# p C1.new.method1
+
+
+# 特異クラスの取得方法
+
+ccc = C1.new
+singleton_class = class << ccc
+    self
+end
+
+p singleton_class
+
+# 特異クラスの定義
+class << ccc
+    def method5; p 'これ特異クラスの定義方法'; end
+end
+
+ccc.method5
+
+# selfについて
+
+# selfは定義されている場所によってオブジェクトが異なる
+# class内ではクラス、メソッド内ではレシーバ(メソッド呼び出したobj)
+class C2
+    p self
+    def method11
+        self
+    end
+end
+
+# c2 = C2.new
+# p c2 == c2.method11
