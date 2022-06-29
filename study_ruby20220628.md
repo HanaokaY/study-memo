@@ -52,3 +52,45 @@ def foo1.method2
 end
 
 ```
+
+# クラスメソッドの定義方法
+
+### Classクラスに定義
+Classクラスに定義することで、Classクラスを継承している子クラスは、Classクラスに定義されているメソッドをクラス名.クラスメソッドで使用できる。
+
+```
+class Class
+    def c_method
+        1
+    end
+end
+
+Sample.c_method #=> 1
+```
+
+その他にも3種類の方法がある
+
+```
+# 1
+def self.c_method; 1; end
+# 2
+def Sample.c_method; 1; end
+# 3
+class << self
+    def c_method; 1; end
+end
+```
+
+# メソッドの可視性
+|||
+| --- | --- |
+|public|どのインスタンスからも実行可能|
+|protected|自分自身、サブクラスのインスタンスから実行可能|
+|private|レシーバをつけた実行は不可|
+
+デフォルトではpublicだから、どのインスタンスからも実行可能になってる。
+
+
+
+
+
