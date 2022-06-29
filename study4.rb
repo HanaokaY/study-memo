@@ -46,11 +46,14 @@ class Class
     def c_method1
         "Classクラスのメソッド"
     end
+    p self.ancestors
 end
 
 # p C3.c_method1
 # p Class.ancestors
 
+p self.class
+p :Kernel.methods
 
 
 
