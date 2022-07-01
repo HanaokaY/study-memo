@@ -123,12 +123,12 @@ p name
 a = [1,2,3,4,5,6,2]
 # p a.join(", ")
 
-h1 = {"apple" => "fruit", "coffee" => "drink"}
+h1 = {"apple" => "fruit", "coffee" => "drink", "lemon" => "fruit"}
 # h1.delete("apple") # 破壊的
 # h1.delete_if{|key,value|value == "fruit"} # 同じく破壊的
 # p h1.reject{|key,value| value == "drink"} # 破壊的ではない
-h1.reject!{|key,value| value == "drink"} # 破壊的
-# p h1
+# h1.reject!{|key,value| value == "drink"} # 破壊的
+p h1.invert
 
 
 
