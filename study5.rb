@@ -62,5 +62,10 @@ a = {
 
 
 
+mod = Module.new
 
+mod.module_eval{EVAL_CONST = 100}
+
+puts "EVAL_CONST is defined? #{mod.const_defined?(:EVAL_CONST, false)}"
+puts "EVAL_CONST is defined? #{Object.const_defined?(:EVAL_CONST, false)}"
 
