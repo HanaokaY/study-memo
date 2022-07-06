@@ -36,7 +36,13 @@ p ClassA.new.respond_to? :foo
 #=> prependによってfooメソッドが取り込まれていることがわかる。
 #=> モジュールを取り込まない場合は、クラスBを継承しているため、どのみちfooメソッドは存在する。
 ClassA.new.foo #=> インスタンスメソッドだからnewしないと実行できない。
-
+cb = ClassB.new
+class << cb
+    def test
+        p 'これは特異メソッド'
+    end 
+end
+cb.test
 
 # f = Fiber.new{
 #     p "A"
@@ -56,10 +62,10 @@ ClassA.new.foo #=> インスタンスメソッドだからnewしないと実行�
 # require 'json'
 # h = {"a" => 1, "b" => 2}
 
-t1 = Thread.start{
-    raise ThreadError
-}
-sleep
-p t1.status
+# t1 = Thread.start{
+#     raise ThreadError
+# }
+# sleep
+# p t1.status
 
 
