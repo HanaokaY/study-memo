@@ -49,9 +49,8 @@ class Movie < Entity
 
 end
 
-
-movie = Movie.new(3)
-movie.title = "くれよんしんちゃん"
+movie = Movie.new(4)
+movie.title = "どらえもん"
 movie.director = "スタンリー・キューブリック"
 
 
