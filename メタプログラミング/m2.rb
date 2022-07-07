@@ -1,3 +1,4 @@
+
 # class Array
 #     def replace(original, replacement)
 #         self.map{|e| e == original ? replacement : e}
@@ -88,7 +89,6 @@ end
 # ただ、特異メソッドってインスタンス固有のメソッドっていう認識だったから、使えるとすればClassクラスのインスタンスで特異メソッドを定義して、
 # ようやく使えるのかなって思っていた。
 
-
 # そもそも特異メソッドとは
 # 単一のオブジェクトに特化したメソッド。
 # クラスメソッドとかはよく見る。
@@ -96,3 +96,74 @@ end
 
 # メソッドはクラスに属しますが、それでは特異メソッドはどこに定義されるのでしょうか？
 # 正解は特異クラス（Singleton Class）
+
+
+# p Class.superclass
+# p Class.ancestors
+# p Object.superclass
+# p BasicObject.class
+# p Module.class
+# 疑問
+# Class,Object,BasiceObjectはどれもClassクラスだが、
+# 継承チェーン的には、Object,BasiceObjectは、Classよりの奥にいるから、
+# イメージ的にはClassクラスが出てるく前にClassクラスってのが登場してくるのが不思議
+#=> メタクラス、メタオブジェクトという考え方をネットで調べるとでてくる。
+#=> この辺のObjectがなぜClassクラスなのかとかを考え出すと大変らしいので、いったんそういうもんだって感じ
+
+# class MyClass; def my_method; p  'my_mthoed()'; end; end
+# class MySubClass < MyClass; end
+
+# obj = MySubClass.new
+# obj.my_method
+
+
+
+# class String
+#     def to_str
+#         "勝手に変更した"
+#     end
+# end
+
+# module StringExtenstions
+#     refine String do
+#         def to_str
+#             "refineでの変更"
+#         end
+#     end
+# end
+# p "2".to_str
+# using StringExtenstions
+# p "2".to_str
+
+# class MyClass
+#     def my_method
+#         p "original my_mthod"
+#     end
+
+#     def another_method
+#         my_method
+#     end
+# end
+
+
+# module MyClassRefinements
+#     refine MyClass do
+        
+#         def my_method
+#           p  "refined my_method"
+#         end
+#     end
+# end
+
+# using MyClassRefinements
+# MyClass.new.my_method
+# MyClass.new.another_method
+
+# sendメソッドを使ってオブジェクトにメッセージを送ってメソッドを実行するイメージ
+# MyClass.new.send(:my_method)
+# MyClass.new.send(:another_method)
+
+
+
+
+
