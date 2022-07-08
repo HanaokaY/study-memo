@@ -17,7 +17,7 @@ class C1
     def method4
         p 'hello4'
     end
-
+private
     def method5
         p 'hello5'
     end
@@ -28,4 +28,5 @@ c1 = C1.new
 attributers.each do |a|
     c1.send(a)
     # 仮にここがドットaでメソッドを呼び出すとNoMethodErrorとなる
+    # sendメソッドはprivateメソッドまで呼び出せてしまう
 end
