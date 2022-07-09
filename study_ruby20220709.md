@@ -76,6 +76,7 @@ end
 p = Proc.new{return 10}
 foo(p)
 ```
-Proc.newが定義されているスコープはトップレベルだから、トップレベルのスコープは抜けることができないため、LocalJumpErrorが発生する。
+Proc.newが定義されているスコープはトップレベルだから、トップレベルのスコープは抜けることができないため、LocalJumpErrorが発生する。<br>
+ただ、Proc.newで定義時に明示的にreturnを記述しなければこのエラーは防ぐことができる。
 
 
