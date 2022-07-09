@@ -52,7 +52,30 @@ Module.new
 Module.define_method
 ```
 
+# ブロックについて Proc lambda
+lambdaはProcをつくる方法のひとつのこと<br>
+Procはブロックを持ち運び便利なオブジェクトにしたもの<br>
+結局は、普通のブロックかProcしかない。
+#### Procオブジェクトの精製方法
+```
+1. Proc.new{} 引数を多く渡しても必要な分だけ読み取る
+1. proc{}
+1. lambda{} 引数を多く渡すとArgumentErrorになる
+1. ->{}
+```
+Proc.newではreturnでメソッド自体を抜ける。<br>
+lambdaはreturnした後もメソッドに処理が戻る。<br>
 
+注意しなければいけないのは、ProcはreturnしたらProcから戻るのではなくProcが定義されたスコープから戻る。<br>
+つまり、
+```
+def foo call_proc_obj
+    call_proc_obj.call
+end
 
+p = Proc.new{return 10}
+foo(p)
+```
+Proc.newが定義されているスコープはトップレベルだから、トップレベルのスコープは抜けることができないため、LocalJumpErrorが発生する。
 
 

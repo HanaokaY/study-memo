@@ -54,10 +54,12 @@ end
 # inc(4)
 # counter
 
-def methodb greeting
-    p "#{greeting}"
-    p yield + "さん"
+def methodb &block
+    p block.call if block_given?
+    # yieldでもいい
 end
 
-my_proc = proc{"Bill"}
-methodb("hello",&my_proc)
+pr = proc{"hello"} #=> Proc.newでもいい
+methodb &pr
+
+
