@@ -22,3 +22,30 @@ end
 # よってバグは無限ループし続ける
 
 
+class ClassName
+    def foo
+        p 'hello'
+    end
+end
+
+class ClassName2
+    def initialize(data)
+        @data = data
+    end
+    def method_missing(name)
+        !@data.respond_to?("#{name}") ? super : @data.send("#{name}")
+    end
+end
+
+c2 = ClassName2.new(ClassName.new)
+c2.foo
+
+
+class Class2
+    class << Class2
+        def method_name
+            p 'hello'
+        end
+    end
+    method_name #=> 同スコープ内ならクラスメソッドもレシーバ指定なしで実行できる
+end

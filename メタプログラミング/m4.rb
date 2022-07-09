@@ -1,4 +1,4 @@
-class DebugCalled < BasicObject
+class DebugCalled < BasicObject #=> ブランクスレート　最小限のメソッドしかない状態のクラスのこと
     using ::Module.new { #=> using Module.new の中のrefineは他のファイルには一切影響を与えないらしい
 
         refine ::Object do
