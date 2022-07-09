@@ -63,3 +63,21 @@ pr = proc{"hello"} #=> Proc.newでもいい
 methodb &pr
 
 
+
+
+# メソッドをオブジェクトにして、動的に新しいメソッドを作成
+# ちょっと複雑
+
+module MyModule
+    def my_method
+        p 'hello'
+    end
+end
+
+unbound = MyModule.instance_methods(:my_method)
+unbound.class #=> UnboundMethodというクラスやモジュールから引き離されたメソッドを指すクラスになる。
+
+# String.send :define_method :another_method, MyModule.instance_methods(:my_method)
+# "Stringのオブジェクト".another_method
+
+
