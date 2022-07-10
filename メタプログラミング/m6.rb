@@ -142,3 +142,17 @@ c4.only
 c4.m_hell
 
 
+module Mod
+    def self.foo
+        p "Mod"
+    end
+end
+class Cls2
+    include Mod
+end
+
+
+
+
+
+
