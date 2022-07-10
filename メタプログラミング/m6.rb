@@ -81,3 +81,64 @@ unbound.class #=> UnboundMethodというクラスやモジュールから引き�
 # "Stringのオブジェクト".another_method
 
 
+class Sample
+    def initialize
+        @x = 1
+    end
+end
+
+sa = Sample.new
+sa.instance_eval do
+    def sample_method
+        p @x
+    end
+end
+# 特異クラスにのみ作成するからsaの特異クラスにしかsample_methodは存在しない
+p sa.singleton_class.instance_methods
+p Sample.instance_methods
+
+
+# オブジェクトの特異クラスのスーパークラスは、オブジェクトのクラスである。
+# クラスの特異クラスのスーパークラスはクラスのスーパークラスの特異クラスである。
+
+
+module M3
+    # def self.m_hell #=> これだとインクルード先ではクラスメソッドとしては扱えない
+    #     p 'm_hello'
+    # end    
+
+    def m_hell
+        p "#{self}さんhello"
+    end
+end
+
+class C3
+    class << self
+        def say_hello
+            p 'hello'
+        end
+    end
+end
+class C4 < C3
+    class << self
+        include M3 #=> モジュールはインスタンスメソッドを提供する。つまり、クラス側でクラスメソッドにしてしまえばいい。
+    end
+end
+C4.say_hello
+# C4.m_hell #=> includeしたモジュールのクラスメソッドは手に入らない
+C4.m_hell
+# C4.new.m_hell #=> 逆にモジュールはクラスメソッドとして取り込まれているから、オブジェクトからの呼び出しはできない。
+
+c4 = C4.new
+def c4.only
+    p 'c4の特異メソッド'
+end
+# class << c4
+#     include M3 #=> この3行を簡単に行ってくれるメソッドがObject#extendである。
+# end
+c4.extend M3
+
+c4.only
+c4.m_hell
+
+
