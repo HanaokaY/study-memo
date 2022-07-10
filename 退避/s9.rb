@@ -66,8 +66,8 @@ end
 # class B < A
 #     @x = 3
 # end
-A.x #=> クラスメソッドからはインスタンス変数にはアクセスできない
-A.new.x
+# A.x #=> クラスメソッドからはインスタンス変数にはアクセスできない
+# A.new.x
 
 # インスタンス変数
 # インスタンス変数にアクセスできるのは、initializeメソッドとオブジェクトのインスタンスメソッドだけ
@@ -83,3 +83,64 @@ A.new.x
 # そのクラスのみでしか参照できない
 # そのクラスを継承したクラスではその変数にアクセスできない
 # インスタンスメソッドからアクセスすることはできない（クラスオブジェクトのインスタンス変数であるため。つまり自分とオブジェクトが違う。）
+
+module Mod
+    def foo
+        p 'Modのfoo'
+    end
+end
+class Cls1
+    include Mod
+end
+
+class Cls
+    # include Mod
+    # prepend Mod
+    def foo
+        p 'Clsのfoo'
+    end
+    undef :foo
+    # prepend Mod
+end
+# 「undef」という名前ですが、「呼ぶとNameErrorになるようにメソッドを定義する」と考えたほうが適切です。
+# undef のより正確な動作は、メソッド名とメソッド定義との関係を取り除き、そのメソッド名を特殊な定義と関連づけます。
+# この状態のメソッドの呼び出しはたとえスーパークラスに同名のメソッドがあっても例外 NameError を発生させます。
+# 要は、undefを使ったら系諸チェーンを探索しに行くこともなくNoMethodErrorとなる。
+# Cls.new.foo
+
+
+p [1,3,4,6].sort{|a,b|a - b}
+
+#p self #=> Objectクラスのオブジェクトであるmain
+
+class << self
+    def main_method
+        p 'main#method'
+    end
+end
+
+def hanaoka_method
+    p 'これはトップレベルで定義してから継承先でパブリックに変更している'
+end
+class Test
+    def hanaoka_method
+        super
+    end
+end
+Test.new.hanaoka_method
+
+# トップレベルでメソッドを定義すると Object のメソッドとして定義される
+# トップレベルの self が main っていう特別なオブジェクトなので、どうしてもそっちの方に意識が向くんですが、
+# トップレベルの self とトップレベルのメソッドは特に関連性はありません。
+# 一旦、mainについてはそういうものがあるって程度に留めておこう。
+
+class Err1 < StandardError; end
+class Err2 < Err1; end
+
+begin
+    raise Err2
+rescue Err1 => e
+    p e.class
+end
+
+
