@@ -58,3 +58,53 @@ end
 # 今回のこの問題は継承チェーンを表しているわけではなくただ単にネストさせているだけだから、
 # 他クラスで同名の定数が定義されていても関係ない
 
+
+def foo(n)
+    n ** n
+end
+
+foo = Proc.new { |n| #=> Procはcallまたは[]で呼び出す
+    n * 3
+}
+
+# puts foo[2] * 2
+
+
+
+# 演算	戻り値クラス
+# Date同士の減算	Rational
+# Time同士の減算	Float
+# DateTime同士の減算	Rational
+
+
+def hoge(*args, &block)
+    block.call(args)
+end
+
+hoge(1,2,3,4) do |*args|
+    # ここの引数でも*argsと受けっているから配列を渡した場合、配列の中に配列となる
+    p args.length < 0 ? "hello" : args
+end
+
+
+module Parent
+    def method_1
+        __method__
+    end
+end
+
+module Child
+    # include Parent
+    # extend self
+
+    extend Parent
+end
+
+p Child::method_1
+p Child.singleton_methods
+
+
+
+
+
+
