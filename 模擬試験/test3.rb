@@ -44,3 +44,32 @@ p "Matis my tEacher"[/[J-P]\w+[^ ]/] #=> [^ ]により空白手前まで
 
 # p "HANAOKAyudai"[/[A-Z]+\w/]
 
+module M
+    def class_m
+        "class_m"
+    end
+end
+
+class C
+    include M
+end
+
+# p C.methods.include? :class_m #=> methodsメソッドは特異メソッドのみを取得するからincludeだとインスタンスメソッドとなるからfalse
+
+
+# a = (1..5).partition(&:even?)
+# odd?が奇数、even?が偶数
+
+local = 0
+
+p1 = Proc.new { |arg1, arg2| #=> lambdaだと引数に厳しいから、この問題ではエラーになる
+  arg1, arg2 = arg1.to_i, arg2.to_i
+  local += [arg1, arg2].max
+}
+
+p1.call("1", "2")
+p1.call("7", "5")
+p1.call("9") #=> lambdaだとArgumentError
+
+# p local
+
