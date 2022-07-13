@@ -122,4 +122,27 @@ p "Matz is my tEacher"[/[a-z][A-Z].*/]
 #=> tEacher
 
 
+module K
+    CONST = "Good, night"
+    class P
+    end
+end
+
+module K::P::M
+    class C
+        CONST = "Good, evening"
+    end
+end
+
+module M #=> K::P::M::Cとは別のモジュールのネスト
+    class C
+        CONST = "Hello, world"
+    end
+end
+
+class K::P #=> classは最後尾の定数の定義のためもの。別にKがmoduleだとしても問題ない。あくまでPをクラスとするという意味。
+    class M::C
+        p CONST
+    end
+end
 
