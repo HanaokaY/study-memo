@@ -122,27 +122,52 @@ p "Matz is my tEacher"[/[a-z][A-Z].*/]
 #=> tEacher
 
 
-module K
-    CONST = "Good, night"
-    class P
+# module K
+#     CONST = "Good, night"
+#     class P
+#     end
+# end
+
+# module K::P::M
+#     class C
+#         CONST = "Good, evening"
+#     end
+# end
+
+# module M #=> K::P::M::Cとは別のモジュールのネスト
+#     class C
+#         CONST = "Hello, world"
+#     end
+# end
+
+# class K::P #=> classは最後尾の定数の定義のためもの。別にKがmoduleだとしても問題ない。あくまでPをクラスとするという意味。
+#     class M::C
+#         # p CONST
+#     end
+# end
+
+
+
+class C; end
+
+module M
+  refine C do
+    def m1
+      100
     end
+  end
 end
 
-module K::P::M
-    class C
-        CONST = "Good, evening"
-    end
+class C
+  def m1
+    400
+  end
+
+  def self.using_m
+    using M #=> usingはメソッドの中で呼び出すことは出来ません。呼び出した場合はRuntimeErrorが発生します。
+  end
 end
 
-module M #=> K::P::M::Cとは別のモジュールのネスト
-    class C
-        CONST = "Hello, world"
-    end
-end
+C.using_m
 
-class K::P #=> classは最後尾の定数の定義のためもの。別にKがmoduleだとしても問題ない。あくまでPをクラスとするという意味。
-    class M::C
-        p CONST
-    end
-end
-
+puts C.new.m1
