@@ -78,3 +78,16 @@ end
 
 # メソッド名をシンボルで指定する必要があるから、
 # __method__で指定してもエラーにならない
+
+
+array = ["a", "b", "c"].freeze
+
+array.each do |chr|
+  chr.upcase! #=> upcase!は破壊的メソッドではないためフリーズしててもエラーにならない。
+end
+
+# p array
+
+# inspectメソッドについて
+# pメソッドにはinspectメソッドが用いられているため選択肢puts foo.inspectと同じ出力になります。
+
