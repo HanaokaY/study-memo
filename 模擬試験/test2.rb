@@ -91,3 +91,18 @@ end
 # inspectメソッドについて
 # pメソッドにはinspectメソッドが用いられているため選択肢puts foo.inspectと同じ出力になります。
 
+def m1(*)
+    str = yield if block_given?
+    p "m1 #{str}"
+end
+
+def m2(*)
+    str = yield if block_given?
+    p "m2 #{str}"
+end
+
+m1 m2 do
+    "hello"
+end
+# { }はdo endよりも結合度が高い為、実行結果に差が出ます。
+
