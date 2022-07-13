@@ -73,3 +73,28 @@ p1.call("9") #=> lambdaだとArgumentError
 
 # p local
 
+# module M
+#     CONST = "Hello, world"
+#   end
+  
+#   class M::C
+#     def awesome_method
+#       CONST
+#     end
+#   end
+  
+#   p M::C.const_defined?(:CONST) #=> 定数がレキシカルスコープ内に定義されていないからfalse。でも、継承チェーンをたどるから参照可能。
+#   p M.const_defined?(:CONST)
+
+
+module M
+    CONST = "Hello, world"
+  
+    class C
+      def awesome_method
+        CONST
+      end
+    end
+  end
+  
+  
