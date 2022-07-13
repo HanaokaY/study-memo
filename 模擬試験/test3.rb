@@ -22,3 +22,14 @@ end
 # loadは設定ファイルの読み込みに用いる。 => 都度読み込みたい
 
 
+module SuperMod
+    module BaseMod
+        p Module.nesting # [SuperMod::BaseMod, SuperMod]
+    end
+end
+
+module SuperMod::BaseMod
+    p Module.nesting # [SuperMod::BaseMod]
+end
+
+# 記述方法が変わると結果が変わる点に注意
