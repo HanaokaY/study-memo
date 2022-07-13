@@ -58,7 +58,7 @@
 class Array
     def succ_each(step = 1)
         p block_given?
-        return to_enum(__method__, step) unless block_given?
+        return enum_for(__method__, step) unless block_given?
        p block_given? #=> 一度目にブロック無しで呼ばれたら、次はブロックある状態で実行されている事がわかる。
         each do |int| #=> ここのeachはselfの配列を省略して記述してるっぽい
             yield int + step
@@ -71,6 +71,10 @@ end
     p int.chr
 }
 
-# to_enumかenum_forでEnumeratorオブジェクトを作成することが出来る。
-# 第一引数にはメソッド名をシンボルで入れる。
-# とりあえずこの手の問題はEnumeratorオブジェクトを作っているんだという認識でいく。
+# Enumeratorオブジェクトを作成するためには、
+# to_enumまたは、enum_forを呼びます。
+# これらの引数にメソッド名をシンボルで指定することでチェーンした先で
+# ブロックを渡されたときにどのメソッドを評価すればよいかが分かります。
+
+# メソッド名をシンボルで指定する必要があるから、
+# __method__で指定してもエラーにならない
