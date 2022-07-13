@@ -148,26 +148,52 @@ p "Matz is my tEacher"[/[a-z][A-Z].*/]
 
 
 
-class C; end
+# class C; end
 
-module M
-  refine C do
-    def m1
-      100
-    end
+# module M
+#   refine C do
+#     def m1
+#       100
+#     end
+#   end
+# end
+
+# class C
+#   def m1
+#     400
+#   end
+
+#   def self.using_m
+#     using M #=> usingはメソッドの中で呼び出すことは出来ません。呼び出した場合はRuntimeErrorが発生します。
+#   end
+# end
+
+# C.using_m
+
+# puts C.new.m1
+
+# f = Fiber.new do |name|
+#     Fiber.yield "Hi, #{name}"
+# end
+
+# p f.resume('Matz') # 'Hi, Matz'と表示されます。
+# p f.resume('Akira') # 'Akira'と表示されます。
+# p f.resume('Steve') # FiberErrorが発生します。
+
+# f = Fiber.new do
+#     Fiber.yield 15
+#     5
+#   end
+#   p f.resume
+# p f.resume
+
+fiber = Fiber.new do
+    p 'Hello' 
+    Fiber.yield #-> 処理を停止し親ファイバーに戻る。
+    p 'Hello2'
   end
-end
+  
+  fiber.resume #-> 'Hello' #ファイバーの持つブロックの実行
+  fiber.resume
 
-class C
-  def m1
-    400
-  end
-
-  def self.using_m
-    using M #=> usingはメソッドの中で呼び出すことは出来ません。呼び出した場合はRuntimeErrorが発生します。
-  end
-end
-
-C.using_m
-
-puts C.new.m1
+#   ファイバはブロック内にある処理を全部やるまでresumeで実行できる。引数がある場合は最後にプラス一回、引数の出力で多いのかも。
