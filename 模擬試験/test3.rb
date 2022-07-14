@@ -247,4 +247,22 @@ class K < C
   end
 end
 
-puts K.new.m1 400
+p K.new.m1 400
+
+
+
+class Human
+    NAME = "Unknown"
+    # 定数の探索順位はクラス内 -> スーパークラス -> クラス探索順に行われます。
+    # よって、Human#nameのクラス内定数であるNAME = "Unknown"が返されます。
+
+    def name
+        NAME
+    end
+end
+
+class Noguchi < Human
+    NAME = "Hideyo"
+end
+
+p Noguchi.new.name
