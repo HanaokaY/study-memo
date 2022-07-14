@@ -110,20 +110,54 @@ p1.call("9") #=> lambdaだとArgumentError
 
 # p C.const_defined?(:CONST)
 
-class C
-end
+# class C
+# end
 
-module M
-  CONST = "Hello, world"
+# module M
+#   CONST = "Hello, world"
+#   C.class_eval do
+#     p Module.nesting #=> ブロックを渡しているため、ネストの状態はM
+#     def awesome_method
+#       CONST
+#     end
+#   end
+# end
 
-  C.class_eval do
-    def awesome_method
-      CONST
-    end
-  end
-end
-
-p C.new.awesome_method
+# p C.new.awesome_method
 
 
+# クラスのコンテキストでブロック(文字列)を評価する。
+# インスタンスメソッドやクラスメソッドを定義したりできる。
+# module_evalはclass_evalの別名。
 
+# class_evalで注意しなくてはいけないことは、引数がブロックか文字列かで定数やクラス変数のスコープが変わること。
+# ブロックの場合スコープはclass_evalの外側になる。
+# 文字列の場合スコープはclass_evalで評価したclass
+
+# class C
+#     CONST = "Hello, world"
+# end
+# module M
+#     C.class_eval(<<-CODE)
+#     p Module.nesting
+#         def awesome_method
+#             CONST
+#         end
+#     CODE
+# end
+# p C.new.awesome_method
+
+
+# class C
+#     CONST = "ブロックを渡しているから、外側のスコープがコンテキストになる。これは無視される。"
+#   end
+#   module M
+#     CONST = "ネストの状態は#{Module.nesting}"
+#     C.class_eval do
+#       def awesome_method
+#         CONST
+#       end
+#     end
+#   end
+  
+#   p C.new.awesome_method
