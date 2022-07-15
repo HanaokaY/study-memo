@@ -176,3 +176,37 @@ puts v2 and false
 # block.yield
 
 
+
+# module M
+#     def a
+#       100
+#     end
+  
+#     module_function :a #=> モジュール関数とは、プライベートメソッドであると同時にモジュールの特異メソッドでもあるようなメソッドです。
+#   end
+  
+#   p M.a
+
+# module M
+#     class << self
+#       def a
+#         100
+#       end
+#     end
+#   end
+  
+#   p M.a
+
+proc = lambda { |n|
+    n.to_s
+}
+
+# p Object.methods
+p [1,2,3,4].map(&proc)
+
+# p [1,2,3,4].map do |num|
+#     :to_s.to_proc.call(num)
+# end
+
+
+# usingはメソッドの中で呼び出すことは出来ない
