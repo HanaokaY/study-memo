@@ -45,17 +45,26 @@
 #   puts human.name
   
 
-class Human
-    attr_reader :name
+# class Human
+#     attr_reader :name
   
-    def name
-      "Mr. " + name #=> nameメソッドの中で同名のメソッドを呼び出していますので、再帰呼出しになっています。終了せず、例外が発生します
-    end
+#     def name
+#       "Mr. " + name #=> nameメソッドの中で同名のメソッドを呼び出していますので、再帰呼出しになっています。終了せず、例外が発生します
+#     end
   
-    def initialize(name)
-      @name = name
-    end
-  end
+#     def initialize(name)
+#       @name = name
+#     end
+#   end
   
-  human = Human.new("Andrew")
-  puts human.name
+#   human = Human.new("Andrew")
+#   puts human.name
+
+
+# Rubyオプション
+# -l: 各行の最後に String#chop!を実行します。
+# -p: -nと同じだが$_を出力
+# -n: 同上
+
+
+
