@@ -68,3 +68,111 @@
 
 
 
+# class C
+#     def m1(value)
+#       100 + value
+#     end
+#   end
+  
+#   module R1
+#     refine C do
+#       def m1
+#         super 50
+#       end
+#     end
+#   end
+  
+#   module R2
+#     refine C do
+#       def m1
+#         super 100 #=> superはクラスCにあるm1を呼び出す。
+#       end
+#     end
+#   end
+  
+#   using R1
+#   using R2 #=> 最後に書いたusingから優先される。
+  
+#   puts C.new.m1
+
+
+
+# prepend M1 m2 #=> 複数モジュールを指定した場合は、左側が先にメソッド探索されます。
+
+
+
+module M
+    def foo
+      super
+      puts "M#foo"
+    end
+
+  end
+  
+  class C2
+    def foo
+      puts "C2#foo"
+    end
+  end
+  
+  class C < C2
+    def foo
+      super
+      puts "C#foo"
+    end
+    prepend M
+    # 継承チェイン上で、self のモジュール/クラスよりも「手前」に追加されるため、
+    # 結果として self で定義されたメソッドは override されます。
+    # この継承チェーンが手前になることでオーバーライドされることを忘れがち
+  end
+  
+#   C.new.foo
+
+#   prependすることでself の継承チェインの先頭に「追加する」ため、Cのオブジェクトに直接紐付いているのがMモジュールになるイメージ
+
+
+
+v1 = 1 / 2 == 0
+v2 = !!v1 or raise RuntimeError
+puts v2 and false
+
+# def foo(arg1:100, arg2:200)
+#     puts arg1
+#     puts arg2
+#   end
+  
+#   option = {arg2: 900}
+  
+#   foo arg1: 200, **option
+
+# def bar(&block) #=> 実行してもエラーにならない
+#     block.call
+#   end
+  
+#   bar do
+#     puts "hello, world"
+#   end
+
+
+# def bar(n, &block) #=> 実行してもエラーにならない
+#     block.call
+#   end
+  
+#   bar(5) {
+#     puts "hello, world"
+#   }
+
+
+# def bar(&block) #=> 実行してもエラーにならない
+#     block.yield
+#   end
+  
+#   bar do
+#     puts "hello, world"
+#   end
+
+# ブロックを引数で受け取って処理を呼び出す方法
+# block.call
+# block.yield
+
+
