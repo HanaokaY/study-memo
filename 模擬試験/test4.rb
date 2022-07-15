@@ -61,7 +61,7 @@ class GrandParent
 end
 
 class Parent < GrandParent
-#   MyConst = 'Parent'
+  MyConst = 'Parent'
 end
 
 module NameSpace
@@ -78,15 +78,15 @@ module NameSpace
         prepend MonkeyPatch
         
         def put_myconst_at_base
-            puts ::MyConst
+            puts ::MyConst #=> これは単純にトップレベルのこと
         end
 
         def put_myconst
-            puts MyConst
+            puts Child::MyConst #=> まずはレキシカルで探す。なければ親クラス。今回はレキシカルに存在する。
         end
 
         def put_myconst_with_child
-            puts ::NameSpace::Child::MyConst
+            puts ::NameSpace::Child::MyConst #=> ただのMyConstとどう違うのか。
         end
 
         def put_anything(arg)
@@ -105,11 +105,12 @@ end
 # 左辺無しの::演算子が使えます。
 
 # NameSpace::Child.new.put_myconst_at_base #=> TOPLEVEL
-# NameSpace::Child.new.put_myconst #=> NameSpace
-NameSpace::Child.new.put_myconst_with_child #=> MonkeyPatch
+NameSpace::Child.new.put_myconst #=> NameSpace
+# NameSpace::Child.new.put_myconst_with_child #=> MonkeyPatch
 # NameSpace::Child.new.put_anything(MyConst) #=> TOPLEVEL
 # NameSpace::Child.class_eval { puts MyConst } #=> TOPLEVEL
-## NameSpace::Child.new.put_const_with_grandparent
+# NameSpace::Child.new.put_const_with_grandparent #=> NameError
+
 
 # Rubyは::NameSpace::LittleBrother::MyConstという定数を、それぞれにパーツに分離して計3回の探索をします。
 # 発見されたオブジェクトは､次の探索の開始点として渡されますが、探索はあらためて行われます。
