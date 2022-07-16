@@ -1,49 +1,105 @@
-characters = ["a", "b", "c"]
+# characters = ["a", "b", "c"]
 
-# characters.each do |chr|
-#   chr.freeze
+# # characters.each do |chr|
+# #   chr.freeze
+# # end
+# # characters.map &:freeze
+# upcased = (characters.map &:freeze).map &:upcase
+# # upcased = characters.map do |chr|
+# #   chr.upcase #=> これは単純にupcaseは非破壊的メソッドでupcase!は破壊的メソッドだかららしい
+# # end
+
+# # p upcased
+
+
+# # Procはcallまたは[]で呼び出すことができる
+
+
+
+# class Ca
+#     CONST = "001"
 # end
-# characters.map &:freeze
-upcased = (characters.map &:freeze).map &:upcase
-# upcased = characters.map do |chr|
-#   chr.upcase #=> これは単純にupcaseは非破壊的メソッドでupcase!は破壊的メソッドだかららしい
+
+# class Cb
+#     CONST = "010"
 # end
 
-# p upcased
+# class Cc
+#     CONST = "011"
+# end
+
+# class Cd
+#     CONST = "100"
+# end
+
+# module M1
+#     class C0 < Ca
+#         class C1 < Cc
+#             class C2 < Cd
+#                 p CONST #=> まずはレキシカルを探索、なければ継承チェーンを探索。
+
+#                 class C2 < Cb
+#                 end
+#             end
+#         end
+#     end
+# end
+# # Rubyは定数の参照はレキシカルに決定されますが、この問題ではレキシカルスコープに定数はありません。
+# # レキシカルスコープに定数がない場合は、スーパークラスの探索を行います。
 
 
-# Procはcallまたは[]で呼び出すことができる
 
 
 
-class Ca
-    CONST = "001"
+
+
+
+module B
+    @@val = 30
 end
 
-class Cb
-    CONST = "010"
+class AAA #=> レキシカルにもなくて、Cクラスにもない場合は、レキシカル->継承チェーンをたどるルールに基づいてこのスーパークラス(このクラス)に探索が来る
+    # @@val = 15
+end
+class C < AAA #=> トップレベルに存在しなければ、まずこのクラスに探索が来る。このクラスに定義されていれば、このクラスで探索は終わる。
+    include B
+    # @@val = 10
 end
 
-class Cc
-    CONST = "011"
-end
+# Object.class_eval(<<-EVAL)
+#     @@val = 666
+# EVAL
 
-class Cd
-    CONST = "100"
-end
 
-module M1
-    class C0 < Ca
-        class C1 < Cc
-            class C2 < Cd
-                p CONST #=> まずはレキシカルを探索、なければ継承チェーンを探索。
+# module M
+#     include B
+#     @@val = 20
 
-                class C2 < Cb
-                end
-            end
-        end
+#     # class << C
+#     #     @@val = 55
+#     #     p @@val #=> クラス変数はレキシアkるに決定される。つまり、モジュール内で低ンカイされているなら、モジュール内で定義されているクラス変数となる。
+#     # end
+# end
+class << C
+    # @@val = 10
+    def method_singleton_c
+        p @@val
     end
+    # C.class_eval do #=> evalにブロック渡して評価するとコンテキストが一つ外側になることにより、TOPLEVELのクラス変数を上書きすることになる
+    #     @@val = 222
+    # end
+    # C.class_eval(<<-EVAL) #=> evalに文字列渡してクラスオープンしてクラス変数を上書き出来る。
+    #     @@val = 111
+    # EVAL
+    # @@val = 55 #=> ここで特異クラス側のクラス変数の値を決定すると、クラス側のクラス変数の内容も変更されるようだ。
+    # p @@val #=> クラス変数はレキシアkるに決定される。つまり、モジュール内で低ンカイされているなら、モジュール内で定義されているクラス変数となる。
 end
-# Rubyは定数の参照はレキシカルに決定されますが、この問題ではレキシカルスコープに定数はありません。
-# レキシカルスコープに定数がない場合は、スーパークラスの探索を行います。
+# @@val = 777
 
+p "Cのクラス変数は#{C.class_variable_get(:@@val)}" 
+#=> クラス変数はレキシカルスコープから探索する。つまり、まずはこの処理が書いてあるスコープ(トップクラス)から探索が始まる。
+# つぎにクラス内を探して、継承チェーンをたどる。
+
+
+
+# やはり、探索はレキシカル->スーパークラス->includeしたモジュール
