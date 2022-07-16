@@ -344,3 +344,28 @@ p A.ancestors
 # 結論
 # まずはレキシカルスコープを探索 >> 次に継承しているクラスのレキシカル >> prependしているモジュールのレキシカル
 # この順番で定数の探索をしているっぽい
+
+module MM
+    def self.method_m
+        p 'MM_hello'
+    end
+end
+class AA
+    class << self
+        def method_a
+            p 'AA_hell'
+        end
+    end
+end
+
+class BB < AA
+    include MM
+end
+
+BB.method_a #=> これはAA特異クラスに定義されているクラスメソッドをBB > 特異BBクラス > 特異AAクラスの探索して実行されている。
+# さて、モジュール内のクラスメソッドはインクルードすれば使えるのか？
+# 慶長チェーン的には使えるように見えるが、
+p BB.ancestors #=> [BB, MM, AA, Object, Kernel, BasicObject]
+# BB.method_m #=> 実際は使えない。なぜなら、チェーン上には映るが、スーパークラスで調べても出ない。特異クラスの継承チェーンにはいないから、探索ルートにいない。
+
+
