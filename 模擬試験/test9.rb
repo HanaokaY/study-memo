@@ -50,16 +50,47 @@ c3 = Company.new(1, 'Freedomfish').object_id
 
 # 16
 
-  module M #=> モジュールは別レキシカルスコープだと探索に来ないらしい
+#   module M #=> モジュールは別レキシカルスコープだと探索に来ないらしい
+#     CONST = "Hello, world"
+#   end
+# #   class A
+# #     CONST = 'hello ClassA'
+# #   end
+#   class M::C
+#     def awesome_method
+#       CONST #=> このレキシカルスコープに定義がない&&スーパークラスにも定義されていないならエラー
+#     end
+#   end
+  
+#   p M::C.new.awesome_method
+
+# class C
+#     CONST = "Hello, world"
+#   end
+  
+#   module M
+#     C.class_eval(<<-CODE) #=> class_evalに文字列を渡した場合のネストの状態はクラスC。
+#       def awesome_method
+#         CONST
+#       end
+#     CODE
+#   end
+  
+#   p C.new.awesome_method
+  
+# 文字列 => クラスにコンテキスト
+# ブロック => 一つ外にコンテキスト
+
+class C
     CONST = "Hello, world"
   end
-#   class A
-#     CONST = 'hello ClassA'
-#   end
-  class M::C
-    def awesome_method
-      CONST #=> このレキシカルスコープに定義がない&&スーパークラスにも定義されていないならエラー
+  
+  module M
+    C.class_eval do #=> class_evalにブロックを渡した場合は、ブロック内のネストはモジュールM
+      def awesome_method
+        CONST
+      end
     end
   end
   
-  p M::C.new.awesome_method
+  p C.new.awesome_method
