@@ -48,3 +48,43 @@ p c.val
 
 
 
+class Company
+    attr_reader :id
+    attr_accessor :name
+    def initialize id, name
+      @id = id
+      @name = name
+    end
+    def to_s
+      "#{id}:#{name}"
+    end
+    def <=> other
+      self.id <=> other.id
+    end
+  end
+  
+  companies = []
+  companies << Company.new(2, 'Liberyfish')
+  companies << Company.new(3, 'Freefish')
+  companies << Company.new(1, 'Freedomfish')
+  
+  companies.sort
+  
+  companies.each do |e|
+    puts e
+  end
+
+
+#   
+
+
+class C
+    include M1, M2 #=> 左からC>M1>M2となる
+end
+
+class C
+    include M1
+    include M2 #=> 後のほうがC近い C>M2>M1
+end
+
+# C.ancestorsしたときに違いがあるのか
