@@ -46,3 +46,20 @@ c3 = Company.new(1, 'Freedomfish').object_id
 # p c3
 # p c1.between?(c2, c3)
 # p c2.between?(c3, c1)
+
+
+# 16
+
+  module M #=> モジュールは別レキシカルスコープだと探索に来ないらしい
+    CONST = "Hello, world"
+  end
+#   class A
+#     CONST = 'hello ClassA'
+#   end
+  class M::C
+    def awesome_method
+      CONST #=> このレキシカルスコープに定義がない&&スーパークラスにも定義されていないならエラー
+    end
+  end
+  
+  p M::C.new.awesome_method
