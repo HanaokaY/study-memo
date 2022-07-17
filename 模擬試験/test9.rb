@@ -93,4 +93,43 @@ class C
     end
   end
   
-  p C.new.awesome_method
+#   p C.new.awesome_method
+
+# class String 
+#     alias :hoge :reverse #=> alias式はメソッドやグローバル変数に別名を付けることができます。
+#   end
+  
+#   p "12345".hoge
+
+# aliasは,を使ってはいけない
+# alias_methodは文字列とシンボルのどちらもオッケーだけど、カンマが必要
+
+class String
+    alias_method "hoge", "reverse"
+  end
+  
+#   p "12345".hoge
+
+
+
+# 34
+
+
+class Class
+    def method_missing(id, *args)
+        puts "Class#method_missing"
+    end
+end
+class A
+    def method_missing(id, *args)
+        puts "A#method_missing"
+    end
+end
+class B < A
+    def method_missing(id, *args)
+        puts "B#method_missing"
+    end
+end
+
+B.dummy_method #=> Classクラスのインスタンスメソッドということになる。BはClassクラスのインスタンスだから、Cのインスタンスメソッドを使っている。
+B.new.dummy_method #=> これはBのインスタンスメソッドを呼んでいるから、Bのmethod_missingが呼ばれる。
