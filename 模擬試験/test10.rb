@@ -57,19 +57,19 @@
 
 
 
-class S
-    def initialize
-        puts "S#initialize"
-    end
-end
+# class S
+#     def initialize
+#         puts "S#initialize"
+#     end
+# end
 
-class C < S
-    def initialize(*args)
-        super() #=> superと呼び出した場合は、現在のメソッドと同じ引数が引き継がれます。
-        # 引数を渡さずにオーバーライドしたメソッドを呼び出す際はsuper()とします。
-        puts "C#initialize"
-    end
-end
+# class C < S
+#     def initialize(*args)
+#         super() #=> superと呼び出した場合は、現在のメソッドと同じ引数が引き継がれます。
+#         # 引数を渡さずにオーバーライドしたメソッドを呼び出す際はsuper()とします。
+#         puts "C#initialize"
+#     end
+# end
 
 # C.new(1,2,3,4,5)
 
@@ -87,6 +87,40 @@ class BBB < AAA
         p "#{super()} #{a}"
     end
 end
-BBB.new.method_a("はなおか")
+# BBB.new.method_a("はなおか")
+
+
+# class Human
+#     NAME = "Unknown"
+  
+#     def self.name
+#         p self
+#       const_get(:NAME)
+#     end
+#   end
+  
+#   class Fukuzawa < Human
+#     NAME = "Yukichi"
+#   end
+  
+#   puts Fukuzawa.name
+
+class C
+    CONST = "Hello, world"
+end
+
+$c = C.new
+
+class D
+    class << $c
+        def say
+            CONST
+        end
+    end
+end
+
+p $c.say
+
+
 
 
