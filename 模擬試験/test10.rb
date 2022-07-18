@@ -181,6 +181,7 @@ class Human
 # "7 < 2...7 > 5の結果はX"
 # "8 < 2...8 > 5の結果はX"
 # "9 < 2...9 > 5の結果はX"
+# 左辺がtrueの間は実行され続け、右辺がtrueになったときに範囲式としての結果がfalseになる。
 
 # 下記問題なく実行できる例
 p 1 < 2...6 > 7 ? 'ok' : 'bad'
@@ -197,4 +198,46 @@ p 1 < 1,8 > 7 ? 'ok' : 'bad' #=> これは趣旨が変わる。
 
 
 
+# Kernelモジュールに定義されているメソッド
+p Array("Awesome Array") #=> ["Awesome Array"]
+p Hash(awesome_key: :value) #=> {:awesome_key=>:value}
+p String('0123456789') #=> "0123456789"
 
+
+# 40
+
+class C
+    def self._singleton
+      class << C
+        self
+      end
+    end
+  end
+  
+  p C._singleton
+# メソッド内でただ単にselfを返すだけだと、実行しているクラスが返ってしまう。
+# 特異クラスを返すのであれば、メソッド内でclass << Cといった形で、特異クラスのselfというのを明示的に示す必要がある。
+
+# class C
+# end
+# p C.singleton_class
+
+# class C
+# end
+
+# class << C
+#   def _singleton
+#     self
+#   end
+# end
+
+# p C._singleton
+
+# class C
+# end
+
+# def C._singleton
+#   self
+# end
+
+# p C._singleton
