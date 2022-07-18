@@ -98,9 +98,42 @@
 # 4
 
 
-class String
-    alias :hoge :reverse    
-    # alias hoge reverse    
-end
+# class String
+#     alias :hoge :reverse    
+#     # alias hoge reverse    
+# end
   
-p "12345".hoge
+# p "12345".hoge
+
+
+
+
+
+module M1
+    def method_1
+        __method__
+    end
+end
+
+class C
+    include M1
+end
+
+p C.new.method_1
+
+module M2
+    def method_2
+        __method__
+    end
+end
+
+module M1
+    include M2 #=> サブモジュールを含めるには、クラスにインクルードする前にサブモジュールを継承ツリーに追加する必要があります。
+end
+
+p C.new.method_2
+
+# RExの問題で上記のコードを実行した結果を選択する問題
+# 答えは例外が発生。
+# でも、実際にはmethod_1は表示もされた上で、二回目のpで例外が発生する。
+# 自分は、method_1も出力されるし、例外も発生すると解答したが、それだとだめなんだろうか。。。
