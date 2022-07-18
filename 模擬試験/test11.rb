@@ -131,9 +131,60 @@ module M1
     include M2 #=> サブモジュールを含めるには、クラスにインクルードする前にサブモジュールを継承ツリーに追加する必要があります。
 end
 
-p C.new.method_2
+# p C.new.method_2
 
 # RExの問題で上記のコードを実行した結果を選択する問題
 # 答えは例外が発生。
 # でも、実際にはmethod_1は表示もされた上で、二回目のpで例外が発生する。
 # 自分は、method_1も出力されるし、例外も発生すると解答したが、それだとだめなんだろうか。。。
+
+
+# def foo(arg1:100, arg2:200)
+#     puts arg1
+#     puts arg2
+#   end
+  
+#   option = {arg2: 900}
+  
+#   foo arg1: 200, **{arg2: 900}
+
+# class Array
+#     def succ_each(step = 1)
+#         unless block_given? #=> ブロックを渡していなかったら、このスコープでブロックを生成してる感じ
+#             Enumerator.new do |yielder|
+#                 each do |int|
+#                     yielder << int + step
+#                     # チェーンした先で渡されたブロックを評価するためにはEnumerator::Yielderのオブジェクトを利用します。
+#                     # オブジェクトに対して、<<を実行することでブロック内で評価した結果を受け取ることが出来ます。
+#                 end
+#             end
+#         else
+#             each do |int|
+#                 yield int + step
+#             end
+#         end
+#     end
+# end
+
+# p [98, 99, 100].succ_each(2).map {|succ_chr| succ_chr.chr}
+
+# [101, 102, 103].succ_each(5) do |succ_chr|
+#   p succ_chr.chr
+# end
+
+
+
+
+class Err1 < StandardError; end
+class Err2 < Err1; end
+
+begin
+    raise ArgumentError
+rescue StandardError => e #=> ここで指定されている例外クラスのサブクラスまでしかレスキューされないらしい。
+    # つまり、StandardErrorでレスキューするならどのエラーが発生してもレスキューされる。
+    # resucue StandardError => e ってこと。これなら大体の例外はStandardErrorのサブクラスだから、レスキューされる。
+    p e.class
+else
+    p 'エラーは起きない'
+end
+

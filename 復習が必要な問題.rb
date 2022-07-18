@@ -88,3 +88,33 @@ class C
 end
 
 # C.ancestorsしたときに違いがあるのか
+
+
+# 
+
+# 仕組みをもっと理解する必要がある。
+# 解説は7/18の96点だったテストの39問目
+
+class Array
+    def succ_each(step = 1)
+        unless block_given? #=> ブロックを渡していなかったら、このスコープでブロックを生成してる感じ
+            Enumerator.new do |yielder|
+                each do |int|
+                    yielder << int + step
+                    # チェーンした先で渡されたブロックを評価するためにはEnumerator::Yielderのオブジェクトを利用します。
+                    # オブジェクトに対して、<<を実行することでブロック内で評価した結果を受け取ることが出来ます。
+                end
+            end
+        else
+            each do |int|
+                yield int + step
+            end
+        end
+    end
+end
+
+p [98, 99, 100].succ_each(2).map {|succ_chr| succ_chr.chr}
+
+[101, 102, 103].succ_each(5) do |succ_chr|
+  p succ_chr.chr
+end
