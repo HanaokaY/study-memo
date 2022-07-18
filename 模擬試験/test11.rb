@@ -82,18 +82,25 @@
 #   lines.reverse
 #   p lines
 
-while not DATA.eof?
-    lines = DATA.readlines
-    p lines
-    lines.map(&:chomp!)
-    p lines
-    lines.reverse #=> 破壊的メソッドじゃないから、次の行のlinesには影響してないのかな？
-    lines.map &:succ! #=> やっぱりそうだ。破壊的メソッドにすると、次のp linesの結果も変わる。無意識だったことだ。
-    p lines
-end
-__END__
-1
-2
-3
-4
+# while not DATA.eof?
+#     lines = DATA.readlines
+#     p lines
+#     lines.map(&:chomp!)
+#     p lines
+#     lines.reverse #=> 破壊的メソッドじゃないから、次の行のlinesには影響してないのかな？
+#     lines.map &:succ! #=> やっぱりそうだ。破壊的メソッドにすると、次のp linesの結果も変わる。無意識だったことだ。
+#     p lines
+# end
+# __END__
+# 1
+# 2
+# 3
+# 4
 
+
+class String
+    alias :hoge :reverse    
+    # alias hoge reverse    
+end
+  
+p "12345".hoge
