@@ -241,3 +241,25 @@ class C
 # end
 
 # p C._singleton
+
+array = ["a", "b", "c"]
+array.map &:freeze
+
+# array << 'd' #=> この時点ではarrayの要素はfrozenだけど、配列自体はfrozenではないから要素の追加は可能。
+p array.map &:upcase #=> 要素自体にfreezeがかかっていても、破壊的メソッドでなければ可能。何故かmap!にしてarray自体を変更することは可能。
+# 配列自体にfreezeをかけているなら、map!も使用不可になる。
+# 要素自体にfreezeなら&での破壊的メソッドが不可。配列自体にはmap!が不可となる。
+p array
+array.freeze #=> これで要素の追加も禁止される。
+
+
+module SuperMod
+    module BaseMod
+        class ClassName
+            
+            p Module.nesting #=> [SuperMod::BaseMod::ClassName, SuperMod::BaseMod, SuperMod]
+        end
+    end
+  end
+#   モジュールがネストされた場合はすべての情報が出力されるらしい
+# [SuperMod::BaseMod, SuperMod] 出力順は内側のすべての情報から、外側へ
