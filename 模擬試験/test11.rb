@@ -31,3 +31,17 @@ p C.new.awesome_method
 # end
 
 # p C.new.awesome_method
+
+array = ["a", "b", "c"].freeze
+# array.map! &:freeze #=> たとえfreezeメソッドであったとしても、freeze状態の配列にはmap!は使用不可
+array = array.map{|a| a + "a"} #=> これは破壊的メソッドを使用していないからオッケーらしい
+# array.each do |chr|
+#   chr.upcase!
+# end
+
+p array
+
+
+# とにかく、特に注意すべきは、
+# !がついた破壊的メソッド(もちろん!がついていない破壊的メソッドもある)
+# 配列自体にfreezeをしていても要素自体には破壊的な変更は禁止していないということ。
