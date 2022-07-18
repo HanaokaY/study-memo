@@ -105,22 +105,58 @@ end
   
 #   puts Fukuzawa.name
 
-class C
-    CONST = "Hello, world"
-end
+# class C
+#     CONST = "Hello, world"
+# end
 
-$c = C.new
+# $c = C.new
 
-class D
-    class << $c
-        def say
-            CONST
-        end
+# class D
+#     class << $c
+#         def say
+#             CONST
+#         end
+#     end
+# end
+
+# p $c.say
+
+
+module M
+    @@val = 75
+
+    class Parent
+        @@val = 100
+    end
+
+    class Child < Parent
+        p @@val #=> Parentのクラス変数を継承している
+        @@val += 50
+    end
+
+    if Child < Parent
+        @@val += 25
+    else
+        @@val += 30
     end
 end
 
-p $c.say
+p M::Child.class_variable_get(:@@val)
+p "モジュールMのクラス変数は#{M.class_variable_get(:@@val)}"
 
 
 
-
+class Human
+    NAME = "Unknown"
+  
+    def self.name
+    #   const_get(:NAME) #=> const_getメソッドを使っているから、そのクラスで定義している定数(Unknown)が取得される。
+      NAME #=> もし、定数だけを返すメソッドなら、定数の探索はレキシカルに行われるから、メソッドを定義しているこのクラス内から探索
+    end
+  end
+  
+  class Fukuzawa < Human
+    NAME = "Yukichi"
+  end
+  
+  puts Fukuzawa.name
