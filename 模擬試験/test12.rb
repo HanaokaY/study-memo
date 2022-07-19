@@ -50,3 +50,11 @@ private #=> Ruby2.7からprivateメソッドもselfで呼び出せるように�
 end
 
 Example.new.hoge
+
+
+%r|(http://www(\.)(.*)/)| =~ "http://www.abc.com/"
+p $1 #=> http://www.abc.com/
+p $2 #=> .
+p $3 #=> abc.com
+
+
