@@ -129,3 +129,13 @@ p A.x
 
 
 
+
+# トップレベルにメソッドを定義すると下記と同じ意味になる。
+class Object
+    private
+    def foo
+        p 'Objectのメソッド'
+    end
+end
+
+
