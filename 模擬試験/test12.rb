@@ -139,3 +139,17 @@ class Object
 end
 
 
+/(\d+)/ =~ "fieh111222iifehi"
+p $1 #=> \d+は数字の連続
+
+
+fiber = Fiber.new{
+    p 'A'
+    Fiber.yield p 'B'
+    p "C"
+}
+
+p 'D'
+fiber.resume
+fiber.resume
+p 'E'
