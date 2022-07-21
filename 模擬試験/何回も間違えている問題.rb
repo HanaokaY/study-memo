@@ -108,11 +108,68 @@
 
 # class_evalはクラスをオープン
 # instance_evalは特異クラスをオープン
-# '****************************************************************************************************************'
-
-
 
 # '****************************************************************************************************************'
+
+# class C
+#     CONST = "Hello, world"
+# end
+
+# module M
+    # C.class_eval(<<-CODE)
+    #     p Module.nesting #=> [C, M]
+    #     def awesome_method
+    #         CONST
+    #     end
+    # CODE
+#     C.class_eval do
+#         p Module.nesting #=> [M]
+#         def awesome_method
+#             CONST
+#         end
+#     end
+# end
+
+# p C.new.awesome_method
+
+# 解説
+# Hello,worldは出力される。
+# evalを渡してクラスをオープンしている。Module.nestingの結果は[C,M]。
+# 文字列を渡している場合、コンテキストはクラス内部に入る。
+
+# ブロックを渡している場合は、コンテキストはCには行かないから、定数を定義していないMした探索を行わないためNameErrorとなる。
+
+# '****************************************************************************************************************'
+
+# class C
+#     CONST = "Hello, world"
+# end
+
+# module M
+    # C.instance_eval do
+    #     p Module.nesting #=> [M]
+    #     def awesome_method
+    #         CONST
+    #     end
+    # end
+#     C.instance_eval(<<-TEXT)
+#         p Module.nesting #=> [#<Class:C>, M]
+#         def awesome_method
+#             CONST
+#         end
+#     TEXT
+# end
+
+# p C.awesome_method
+# 解説
+# **クラスと特異クラスでは定数は共有されていない**
+
+# instace_eval ブロック
+# ブロックを渡しているため、コンテキストはモジュールMとなる。Mにはレキシカルスコープに定数は定義されていないためNameErrorとなる。
+
+# instance_eval テキスト
+# テキストを渡しているからコンテキストは特異クラスとなり、モジュールMとネストの関係になる。でも、特異クラスにも定数は定義されていない。
+# クラスと特異クラスは定数を共有していない。特異クラスを探索した後、モジュールを探索している。
 
 # '****************************************************************************************************************'
 
