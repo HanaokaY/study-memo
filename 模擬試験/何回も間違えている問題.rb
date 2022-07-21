@@ -21,7 +21,7 @@
 #     CONST = "Hello, world"
 # end
 
-# class M::C #=> これはただのクラスC。M::がついているけど、このレキシカルスコープはクラスc
+# class M::C #=> これはただのクラスC。M::がついているけど、このレキシカルスコープはクラスc。だからモジュールMに探索は行かない。
 #     p Module.nesting #=> [M::C]
 #     def awesome_method
 #         CONST
@@ -29,7 +29,7 @@
 # end
 
 # module M
-#     class C
+#     class C #=> このネスト記法なら、別に定義されたモジュールMの定数も同じレキシカルスコープとして扱う。
 #         p Module.nesting #=> [M::C, M]
 #         def awesome_method
 #             CONST
@@ -51,22 +51,22 @@
 
 # '****************************************************************************************************************'
 
-class C
-    CONST = "クラスC"
-end
-module M
-    CONST = "Hello, world"
-end
+# class C
+#     CONST = "クラスC"
+# end
+# module M
+#     CONST = "Hello, world"
+# end
 
-module M
+# module M
 #   CONST = "Hello, world"
 
-    C.class_eval do
-        p Module.nesting #=> [M]
-        def awesome_method
-            CONST
-        end
-    end
+    # C.class_eval do
+    #     p Module.nesting #=> [M]
+    #     def awesome_method
+    #         CONST
+    #     end
+    # end
     # C.class_eval(<<-TEXT)
     #     p Module.nesting #=> [C,M]つまり、やはりテキストを渡した場合はクラス内にネストするのか。。
     #     def awesome_method
@@ -85,9 +85,9 @@ module M
     #         CONST
     #     end
     # end
-end
+# end
 # p C.singleton_class.constants #=> 定数は特異クラスとは共有されない。
-p C.new.awesome_method #=> class_eval
+# p C.new.awesome_method #=> class_eval
 # p C.awesome_method #=> instance_eval
 
 # 解説
