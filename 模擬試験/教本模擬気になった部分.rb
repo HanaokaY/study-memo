@@ -110,3 +110,38 @@ p B.class_variables #=> [:@@x]
 # 考えられること
 # クラス変数は継承チェーン上にあるクラス間クラス変数は共有されるから、どこで更新しても全く同じクラス変数をいじっていることになる。
 # つまり、Cで更新しようが、Bで更新しようが、最初にAで定義した@@xクラス変数と全く同じものということ。
+
+
+module Module1
+    def foo
+        p 'Module1#foo'
+    end
+end
+class Class1
+    include Module1
+    # extend Module1 #=> クラスメソッドにしてもundefで消される
+    undef :foo
+    def foo
+        p 'Class1#foo'
+    end
+end
+Class1.new.foo
+# Class1.foo
+# 解説
+# undefの後に消した同名のメソッドを定義すれば、そのメソッドは呼び出すことが出来る。
+# undefはあくまでもundef以前のメソッドが対象になるようだ。
+
+
+
+# protected以降で定義されたメソッドは、そのクラスとサブクラスのインスタンスから呼び出すことができます。
+# しかし、クラスをレシーバとして呼び出すことはできませんので、「Foo.foo」ではエラーになります。
+
+
+# freezeの配列じゃない場合
+
+char = { :a => "A" }.freeze
+char[:a] = "B"
+p char
+# 解説
+# freezeメソッドはオブジェクトを変更不可能にするメソッドです。
+# ハッシュオブジェクトの値を変更しようとしている行でエラーが発生し、プログラムが終了します。
