@@ -100,15 +100,135 @@
 module M
     CONST = 'Hello,world'
 end
-
-M.instance_eval(<<-CODE)
-    def self.say
-        CONST
-    end
+M.singleton_class.class_eval(<<-CODE)
+    CONST = 'Good,night'
 CODE
+
+# M.instance_eval(<<-CODE) #=> instance_evalは特異クラスのオープン。
+#     def self.say
+#         CONST
+#     end
+# CODE
 
 # p M::say #=> NameError
 # 解説
 # instance_evalにテキストを渡しているから、特異クラスの内部にネストする。
 # でも、特異クラスには定数が定義されてもいないし、継承チェーンたどってもCONSTなんて定数は定義されていないから、
 # NameErrorとなってしまう。
+
+# module M::MM
+#     class C
+#         def serch
+#             p Module.nesting 
+#             #=> [M::MM::C, M::MM] 定数探索はnesting基準で考えるべき。つまり、レキシカルで探索するルートは<M::MM::C>と<M::MM>だけ
+#             # つまり、一番外側のMには定数が定義されているから探索で見つかると思いきや、Mは探索の対象になっていない。
+
+#             CONST
+#         end
+#     end
+# end
+
+# p M::MM::C.new.serch
+
+# module M
+#     module MM
+#         class C
+#             def serch
+#                 p Module.nesting 
+#                 #=> [M::MM::C, M::MM, M]
+#                 # このネスト記法の場合なら、Mも探索対象になる。
+                
+#                 CONST
+#             end
+#         end
+#     end
+# end
+# p M::MM::C.new.serch
+
+
+# p M.singleton_class.constants #=> [:CONST]
+
+module M
+    module MM
+        class C
+            def serch
+                # p Module.nesting 
+                #=> [M::MM::C, M::MM, M]
+                # このネスト記法の場合なら、Mも探索対象になる。
+                
+                CONST
+            end
+            class << self
+                def singleton_serch
+                    # p Module.nesting 
+                    #=> [#<Class:M::MM::C>, M::MM::C, M::MM, M]
+                    CONST
+                end
+            end
+        end
+    end
+end
+# p M::MM::C.new.serch
+M::MM::C.instance_eval(<<-CODE)
+    CONST = 'Good,evening'
+CODE
+
+
+p M::MM::C.singleton_serch
+
+
+
+
+
+# Rubyオプション
+
+# -ll
+# ファイルをロードするパスを指定するオプション
+# 指定したディレクトリは$LOAD_PATH変数($:)に格納される。
+# 環境変数RUBYLIBも関係ある。
+
+# -l
+# ファイルをロードするパスを指定するオプション
+# 指定したディレクトリは$LOAD_PATH変数($:)に格納される。
+# 環境変数RUBYLIBは関係ない。 この点が-llと違うポイント
+
+# -r
+# 引数で指定したフィアルを読み込むオプション
+
+
+# def tag(name)
+#     p "<#{name}>#{yield}<#{name}>"
+# end
+
+# def tag(name)
+#     p "<#{name}>#{yield.call}<#{name}>" #=> yieldにcallはつかわない
+# end
+
+# def tag(name,&block)
+#     p "<#{name}>#{block}<#{name}>" #=> blockだけだと出力結果がなんか違う
+# end
+
+# def tag(name,&block)
+#     p "<#{name}>#{block.call}<#{name}>"
+# end
+
+# def tag(name, &block)
+#     p "<#{name}>#{yield}<#{name}>" #=> 引数で渡しいてもyieldだけで実行できる。
+# end
+
+def tag(name,&block)
+    p "<#{name}>#{block[]}<#{name}>"
+end
+
+tag(:p){"hello,world."}
+# 解説
+# ブロックを実行するには、
+    # yieldを使う
+    # ブロック引数を渡して、Proc#callを使う。
+    # []でもblockは実行できる。
+
+
+
+
+
+
