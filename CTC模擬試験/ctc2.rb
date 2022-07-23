@@ -77,3 +77,17 @@ p Foo.new.foo #=> undefより前の定義に影響があるとはいえ、Fooで
 # undef_methodはメソッド呼び出しへのレスポンスを止めます。
 # remove_methodと違い、継承元のクラスにメソッドが定義されていてもエラーとなります。
 
+
+
+# p => inspect
+# print => to_s
+
+
+p String("hello").inspect #=> "\"hello\""
+p String("hello").to_s #=> "hello"
+# 解説
+# to_sがただ単に文字列を返しているのに対して、inspectはオブジェクトを可視化した感じ。
+
+# pとinspectの関係
+# pメソッドはputsとinspectを合体させた機能を持つメソッド
+# つまり、p "hello"とputs "hello".inspectは同じ意味
