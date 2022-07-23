@@ -1,5 +1,5 @@
 # 環境変数 ENV は「文字列」がキー。
-# p ENV['sample']
+# p ENV['sample'] #=> キーは文字列じゃないとだめっぽい
 
 # -Iオプション
 # 引数で指定したディレクトリを$LOAD_PATH変数に追加する。
@@ -54,5 +54,45 @@ end
 
 
 
+# privateとprotected
+
+class ClassName1
+    def foo
+        p 'パブリックです'
+    end
+    private
+    def private_method
+        p 'プライベートです'
+    end
+    protected
+    def protected_method
+        p 'プロテクトされてます'        
+    end
+end
+
+class ClassName2 < ClassName1
+    def initialize
+        foo #=> 呼べる
+        private_method #=> 呼べる
+        protected_method #=> 呼べる
+    end
+end
+
+class ClassName3 < ClassName2
+    def initialize
+        foo #=> 呼べる
+        private_method #=> 呼べる
+        protected_method #=> 呼べる
+    end
+end
+
+# ClassName2.new
+# ClassName3.new
+
+
+# private レシーバ経由で呼べない、関数形式のみ許容
+# ・protected レシーバ経由でも呼べる。ただし仲間に限る
+# ・どっちもサブクラスからも呼べる
+# ・どっちも他人からは呼べない
 
 
