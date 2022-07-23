@@ -120,7 +120,8 @@ puts Bar.new.bar
 
 class Log
     [:debug, :info, :notice].each do |level|
-        __(1)__(level) do
+        # __(1)__(level) do #=> 動的にメソッドを定義したい
+        method_define(level) do
             @state = level
     end
     attr_reader :state
