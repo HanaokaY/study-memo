@@ -35,3 +35,5 @@ Cls2.new.call_foo
 
 p [1,2,3].inject([]){|x,y| x << y ** 2}
 
+
+
