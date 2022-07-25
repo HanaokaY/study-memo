@@ -147,30 +147,30 @@
 
 # # =====================================
 
-module E
-    CONST = '010'
-end
+# module E
+#     CONST = '010'
+# end
 
-module M
-    include E
-    def refer_const
-        CONST
-    end
-end
+# module M
+#     include E
+#     def refer_const
+#         CONST
+#     end
+# end
 
 
-class D
-    CONST = "001"
-end
+# class D
+#     CONST = "001"
+# end
 
-class C < D
-    include E
-    include M
-    CONST = '100'
-end
+# class C < D
+#     include E
+#     include M
+#     CONST = '100'
+# end
 
-c = C.new
-p c.refer_const
+# c = C.new
+# p c.refer_const
 
 # クラスCにモジュールが２つincludeしている状況で、C.ancestorsをすると一見モジュールM内に定数が定義されていないと継承チェーン的には、
 # モジュールEを探しに行くかと思ってしまう。
@@ -182,69 +182,95 @@ p c.refer_const
 # # =====================================
 
 # m = Module.new
-
-# CONST = "Constant in Toplevel"
+# # CONST = "Constant in Toplevel"
 
 # _proc = Proc.new do
-#   CONST = "Constant in Proc"
+#     CONST = "Constant in Proc"
 # end
 
-# m.module_eval(<<-EOS)
-#   CONST = "Constant in Module instance"
+# # m.module_eval(<<-EOS)
+# #   CONST = "Constant in Module instance"
 
-#   def const #=> クラスメソッドは定義していない
-#     CONST
-#   end
-# EOS
+# #   def const #=> クラスメソッドは定義していない
+# #     CONST
+# #   end
+# # EOS
+# m.module_eval(&_proc) #=> ブロックを渡しているからトップレベルに定義していることになる。
+# p Module.constants #=> [Module, Object, Kernel, BasicObject]
 
-# m.module_eval(&_proc)
+# m.instance_eval(<<-CODE)
+#     # CONST = "Constant in Module instance"
 
-# p m.const #=> そもそも、これエラーだった。。。
+#     def const #=> クラスメソッドは定義していない
+#         CONST
+#     end
+# CODE
+
+
+# p m.const
+
 
 # # これってinstance_evalだったら、結果はConstant in Toplevel？
-# # いや、定数は継承されるから、mとmの特異クラスは継承関係にあるから、m.constはmの特異クラスに探索がいくのかな？
+# Constant in Toplevelだった。やはり、特異メソッドが定義してあるのは、特異クラスだからだと思われる。
 
-# # 
+# 解説
+# instance_evalにテキストを渡して、その特異クラスのスコープ内では定数を定義していない。外ではトップレベルに定数を定義している。
+# そんな状況で、特異クラス内で定数を参照しようとすると、トップレベルつまりオブジェクトの定数が参照される。
+# 理由は、mがModuleクラスのインスタンスであり、ModuleクラスはObjectクラスを継承していて、定数を継承しているから。
+
+# [m>>#m>>#object>>#BasicObject>>Class>>Module>>Object]、少し複雑だけど、実際は左記のような継承チェーンとなっている。
 
 # # =====================================
 
 # class C
 #     def self._singleton
 #       class << C
-#         val = self
+#         $val = self
 #       end
-#       val
+#       $val
 #     end
 #   end
   
-#   p C._singleton
+#   p C._singleton #=> #<Class:C>
 
 # #   これって、ローカル変数じゃなければ、特異クラスとれる？
-
+# とれる。確認済み
 
 # # =====================================
 
 # class C
 #     def m1
-#       400
+#         400
 #     end
-#   end
+# end
 
-#   module M
+# module M
 #     refine C do
-#       def m1
-#         100
-#       end
+#         def m1
+#             100
+#         end
 #     end
-#   end
-  
-#   class C
-#     using M
-#   end
+# end
 
-#   class C
-#     # ここでm1を使うと結果は400のまま？
-#   end
+# class C
+#     using M
+#     def call_refine_m1
+#         p "usingを使ったスコープでm1実行 => #{m1}"
+#     end
+# end
+
+# class C
+# # ここでm1を使うと結果は400のまま？
+#     def call_m1
+#         p "call m1メソッド => #{m1}"
+#     end
+# end
+
+# C.new.call_refine_m1 #=> "usingを使ったスコープでm1実行 => 100"
+# C.new.call_m1 #=> "call m1メソッド => 400"
+
+# 解説
+# usingを記述しいるブロック内でしかメソッドの内容は変更されない。
 
 
 # # =====================================
@@ -257,9 +283,9 @@ p c.refer_const
 
 # _proc = Proc.new{|arg| val + arg }
 
-# # p method(val, __(1)__)
-# # &_proc
-# # # &_proc.to_proc
+# p method(val, __(1)__)
+# &_proc
+# # &_proc.to_proc
 
 # # =====================================
 
@@ -290,13 +316,27 @@ p c.refer_const
 #     puts e
 #   end
 
+#   sortメソッドに注目。
+# <=>メソッドをどんなに昇順か降順に設定しても、sort!じゃないとcompanies自体が変更されないから出力結果が変わる。
+
 # # =====================================
 
-# mod = Module.new
 
 # mod.module_eval do
 #   EVAL_CONST = 100
 # end
+
+
+# Module.module_eval(<<-CODE)
+# EVAL_CONST = 200 #=> 定数はインスタンスには共有されない
+# CODE
+# mod = Module.new
+
+# mod.module_eval(<<-CODE)
+# EVAL_CONST = 200
+# CODE
+
+# p mod.constants
 
 # puts "EVAL_CONST is defined? #{mod.const_defined?(:EVAL_CONST, false)}"
 # puts "EVAL_CONST is defined? #{Object.const_defined?(:EVAL_CONST, false)}"
