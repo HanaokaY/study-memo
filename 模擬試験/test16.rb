@@ -343,3 +343,173 @@
 
 
 # # =====================================
+
+
+# ===============================================第二回目の復習
+
+
+# module M
+#     CONST = "Hello, world"
+#   end
+
+#   M.instance_eval(<<-CODE)
+#     CONST = 'singleton world'
+#   CODE
+  
+#   M.module_eval(<<-CODE)
+#     def self.say #=> このままだと、特異メソッドとはいえ参照しているのはMのまま
+#         p Module.nesting #=> [M]
+#         class << self #=> class << selfを追加することで特異クラスを参照するメソッドになる
+#             p Module.nesting #=> [#<Class:M>, M]
+#             p self
+#             CONST
+#         end
+#     end
+#   CODE
+  
+#   p M::say
+
+#   これって、
+
+# def self.say
+#     CONST
+#   end
+#   の中でclass << selfがあれば特異クラスの定数を参照だけど、
+# 今のままだと、selfはモジュールMのままだよね？ ==> 正解、確認した
+
+# メソッド内でnestingしてみるとわかりやすいが、module_evalでオープンして、特異メソッドを定義して、その中で得意クラスの定数を参照してみて、。
+# もし、特異クラスに定数が定義されていない場合、NameErrorかなと思ったが、nestingしてみたところ、[#<Class:M>, M]だから、
+# 特異クラスの次にモジュールに探索が移るらしい。
+
+# ====================================
+
+# class C
+#     @@val = 10
+#   end
+  
+#   module B
+#     @@val = 30
+#   end
+  
+#   module M
+#     include B
+#     @@val = 20
+#     @@val = 40
+#     class << C
+#         C.instance_eval(<<-CODE)
+#             p @@val
+#             def foo
+#                 @@val
+#             end
+#         CODE
+#     @@val = 60
+#     #   p @@val #=> これも上の問題と同じで、この中にclass << selfがあると、参照するのは特異クラス？
+#     end
+#   end
+#   p C.foo
+#   解説
+# クラス変数はレキシカルに決定される。
+# つまり、モジュールMでCの特異クラスのクラス変数をいじろうとすると、そのレキシカルスコープ内のクラス変数の値はすべて一緒になる。
+
+#  ==================================
+
+# def bar(&block)
+#     # yield
+#     # block.yield
+#     # block.call
+#     block.[]
+#     # この4種類の呼び出し方がある。
+
+#   end
+  
+#   bar do
+#     puts "hello, world"
+#   end
+#   blockってcallか[]だけかと思ってたけど、yieldでも呼べるのか
+
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# class Foo
+#     def initialize(num)
+#       @hoge = num
+#     end
+#   end
+  
+#   num = (1..99).to_a.shuffle.first
+#   foo = Foo.new(num)
+  
+#   p foo
+# puts foo.inspect
+# この２つでhogeに入っている値が確認できるらしい
+# あと、inspectとto_sの関係も再確認
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# class C
+#     CONST = "Hello, world"
+#   end
+  
+#   $c = C.new
+  
+#   class D
+#     class << $c
+#         p self.superclass #=> インスタンスの特異クラスの親は、インスタンスのクラスである。
+#       def say
+#         CONST
+#       end
+#     end
+#   end
+
+#   p $c.say
+  
+# インスタンスの特異クラスのクラスは、インスタンスのクラス。
+
+# =======================================
+
+# module P
+#   CONST = "Good, night"
+# end
+# class A
+#    prepend P 
+# end
+
+# class Base < A
+#     # CONST = "Hello, world"
+# end
+
+#   class C < Base
+#   end
+  
+  
+  
+#   module M
+#     class C
+#       CONST = "Good, evening"
+#     end
+#   end
+  
+#   module M
+#     class ::C
+#       def greet
+#         CONST
+#       end
+
+#     end
+#   end
+  
+#   p C.new.greet
+
+# 検証してみて
+# 今回悩んでいる部分は、::Cのメソッドから定数を参照すると、Cには定義されていないから、Baseに探索が移るまでは理解できる。
+# しかし、prepend PによりBaseで定義されている定数よりも、Pの定数のほうが先に探索で発見されるかと思っていた。
+# 実際は下記のような流れで探索が行われているようだ。
+
+# 探索 >> C >> Cで取り込んでいるモジュール >> Base >> Baseで取り込んでいるモジュール >> ....... >> トップレベル
+
+
+
+# require 'socket'
+# p TCPSocket.ancestors.member?(IO)
+# 解説
+# TCPSocketはIOクラスを継承しており、Fileクラスなどと同様な操作でソケットを扱うことができます。
