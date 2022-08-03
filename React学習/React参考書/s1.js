@@ -71,3 +71,28 @@ const {name: his_name, age: his_age} = obj1;
 // console.log(`${his_name}と${his_age}`);
 
 // 分割代入はReactではよく使うらしいから覚える
+
+
+// スプレッド構文
+
+// 関数と配列で使ってみる
+const arr2 = [1,2];
+const func_calc = (num1, num2) => console.log(num1 + num2);
+// func_calc(...arr2); // ...で配列の中身を順番に展開することが出来る
+
+// スプレッド構文を使ってコピーをすることも出来て、その場合のメリットとしては、
+// イコールでコピーすると参照地にまで影響が出てしまうけど、スプレッドならそうならない
+
+
+
+// map
+
+const nameArr = ["user1","user2","user3"]
+// const newNameArr = nameArr.map((name) => { return name === "user2" ? name : null ; })
+// console.log(newNameArr);
+// filterを使えば、簡単
+
+const newNameArr = nameArr.filter((name) => {return name === 'user2'});
+// console.log(newNameArr);
+
+
