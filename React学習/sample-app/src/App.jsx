@@ -35,8 +35,8 @@ export const App = () => {
   };
   return(
     <>
-      <ColoredMessage color="blue" message="propsで渡したテスト"/>
-      <ColoredMessage color="green" message="propsで渡したテスト"/>
+      <ColoredMessage color="red">children</ColoredMessage>
+      <ColoredMessage color="green">children2</ColoredMessage>
       <button onClick={onClickButton}>ボタン</button>
     </>
   );
