@@ -27,10 +27,17 @@
 // 多分、上記の定義方法はES5ってやつかな？
 // 下記のがES6かな
 
+import { ColoredMessage } from "./components/ColoredMessage";
+
 export const App = () => {
+  const onClickButton = () => {
+    alert();
+  };
   return(
     <>
-      <h1>こんにちは！</h1>
+      <ColoredMessage color="blue" message="propsで渡したテスト"/>
+      <ColoredMessage color="green" message="propsで渡したテスト"/>
+      <button onClick={onClickButton}>ボタン</button>
     </>
   );
 };
