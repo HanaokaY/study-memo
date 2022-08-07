@@ -29,8 +29,6 @@
 
 import { ColoredMessage } from "./components/ColoredMessage";
 import { useReducer, useState } from "react"; // state hooksの機能群から使用
-import { useEffect } from "react";
-import styles from "./App.module.scss";
 
 export const App = () => {
   console.log("レンダリング"); // stateが更新されたときにコンポーネントがレンダリングされていることがわかる。
@@ -41,10 +39,7 @@ export const App = () => {
   };
   return(
     <>
-      <ColoredMessage color="red">children</ColoredMessage>
-      <ColoredMessage color="green">children2</ColoredMessage>
-      <button onClick={onClickButton}>ボタン</button>
-      <p className={styles.text}>{num}</p>
+      <p>hello</p>
     </>
   );
 };
