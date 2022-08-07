@@ -28,7 +28,9 @@
 // 下記のがES6かな
 
 import { ColoredMessage } from "./components/ColoredMessage";
-import { useState } from "react"; // state hooksの機能群から使用
+import { useReducer, useState } from "react"; // state hooksの機能群から使用
+import { useEffect } from "react";
+import styles from "./App.module.scss";
 
 export const App = () => {
   console.log("レンダリング"); // stateが更新されたときにコンポーネントがレンダリングされていることがわかる。
@@ -42,7 +44,7 @@ export const App = () => {
       <ColoredMessage color="red">children</ColoredMessage>
       <ColoredMessage color="green">children2</ColoredMessage>
       <button onClick={onClickButton}>ボタン</button>
-      <p>{num}</p>
+      <p className={styles.text}>{num}</p>
     </>
   );
 };
