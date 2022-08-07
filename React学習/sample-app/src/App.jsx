@@ -28,16 +28,21 @@
 // 下記のがES6かな
 
 import { ColoredMessage } from "./components/ColoredMessage";
+import { useState } from "react"; // state hooksの機能群から使用
 
 export const App = () => {
+
+  const [num,setNum] = useState(0);
+
   const onClickButton = () => {
-    alert();
+    setNum((num) => num + 1); // numの値に基づいてnumを更新するという意味で、この記述の仕方が正しい。
   };
   return(
     <>
       <ColoredMessage color="red">children</ColoredMessage>
       <ColoredMessage color="green">children2</ColoredMessage>
       <button onClick={onClickButton}>ボタン</button>
+      <p>{num}</p>
     </>
   );
 };
