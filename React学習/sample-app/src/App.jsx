@@ -31,7 +31,7 @@ import { ColoredMessage } from "./components/ColoredMessage";
 import { useState } from "react"; // state hooksの機能群から使用
 
 export const App = () => {
-
+  console.log("レンダリング"); // stateが更新されたときにコンポーネントがレンダリングされていることがわかる。
   const [num,setNum] = useState(0);
 
   const onClickButton = () => {
