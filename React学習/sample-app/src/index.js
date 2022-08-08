@@ -1,6 +1,6 @@
 import ReactDom from 'react-dom';
 // import App from './App.js'; // ES5だと{}を記述しなくてもいいのかも <= 間違ってた。下記に記述
-import { App } from './App.jsx';
+import { App } from './components/App.jsx';
 
 ReactDom.render(<App/>,document.getElementById("root"));
 

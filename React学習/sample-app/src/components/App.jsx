@@ -27,19 +27,23 @@
 // 多分、上記の定義方法はES5ってやつかな？
 // 下記のがES6かな
 
-import { ColoredMessage } from "./components/ColoredMessage";
+import { ColoredMessage } from "./ColoredMessage";
 import { useReducer, useState } from "react"; // state hooksの機能群から使用
+import styles from "../styles/App.module.scss";
 
 export const App = () => {
   console.log("レンダリング"); // stateが更新されたときにコンポーネントがレンダリングされていることがわかる。
-  const [num,setNum] = useState(0);
-
+  const [num,setNum] = useState(10);
+  
   const onClickButton = () => {
-    setNum((num) => num + 1); // numの値に基づいてnumを更新するという意味で、この記述の仕方が正しい。
+    setNum((num) => num + 1); // numの値に基づいてnumを更新するという意味で、「num + 1」よりも、この記述の仕方が正しい。
   };
+
   return(
     <>
-      <p>hello</p>
+      <p className={styles.text} style={{fontSize:`${num}px`}}>hello</p>
+      <button className={styles.button} onClick={onClickButton}></button>
     </>
   );
+
 };
