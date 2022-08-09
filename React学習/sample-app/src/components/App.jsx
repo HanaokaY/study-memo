@@ -42,7 +42,7 @@ export const App = () => {
   return(
     <>
       <p className={styles.text} style={{fontSize:`${num}px`}}>hello</p>
-      <button className={styles.button} onClick={onClickButton}></button>
+      <button className={styles.button} onClick={onClickButton}>ボタン</button>
     </>
   );
 
