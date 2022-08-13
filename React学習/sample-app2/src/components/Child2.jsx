@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo } from "react"; // memoを使用するだけでpropsに変更がない限り再レンダリングが起きない
 
 const style = {
   height: "50px",

@@ -8,7 +8,7 @@ export const App = memo(() => {
   const [num, setNum] = useState(0);
 
   const onClickButton = () => {
-    setNum(num + 1);
+    setNum((num) => num + 1);
   };
 
   const onClickReset = useCallback(() => {
