@@ -23,4 +23,5 @@ export const App = memo(() => {
       <Child4 />
     </>
   );
+  
 });
