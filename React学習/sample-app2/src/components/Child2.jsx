@@ -14,3 +14,4 @@ export const Child2 = memo(() => {
     </div>
   );
 });
+
