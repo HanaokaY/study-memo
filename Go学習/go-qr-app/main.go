@@ -1,49 +1,35 @@
 package main
 
-import "fmt"
+import (
+	"flag"
+	"fmt"
+	"image/png"
+	"os"
 
-type Reporter interface {
-	Report() string
-}
+	"go-qr-app/qrgen"
+)
 
-type WeatherInfo struct {
-	temperature int
-	weather     string
-}
-
-func (w *WeatherInfo) Report() string {
-	return fmt.Sprintf("天気: %s, 気温: %v度", w.weather, w.temperature)
-}
-
-type StockInfo struct {
-	average int
-}
-
-func (s *StockInfo) Report() string {
-	return fmt.Sprintf("平均株価: %v円", s.average)
-}
-
-func PrintNews(r Reporter) {
-	fmt.Printf("今日のニュースです。%s\n", r.Report())
-}
 
 func main() {
-	w := &WeatherInfo{
-		temperature: 20,
-		weather:     "晴れ",
+	flag.Parse()
+	url := flag.Arg(0)
+	if url == ""{
+		fmt.Println("URL is empty")
+		return
 	}
-	PrintNews(w)
-	// => 今日のニュースです。 天気: 晴れ, 気温: 20度
 
-	s := &StockInfo{
-		average: 30000,
+	file, err := os.Create("./qr.png")
+	if err != nil {
+		fmt.Printf("file generation failed: %v\n", err)
+		return
 	}
-	PrintNews(s)
-	// => 今日のニュースです。平均株価: 30000円
+	defer file.Close()
 
-	// PrintNews("エラー")
-	// 下記のようなコンパイルエラーになる
-	// cannot use "エラー" (type string) as type Reporter in argument to PrintNews:
-	// string does not implement Reporter (missing Report method)
+	img, err := qrgen.GenQRCode(url)
+	if err != nil {
+		fmt.Printf("image generation failed: %v\n", err)
+		return
+	}
 
+	png.Encode(file, img)
 }
