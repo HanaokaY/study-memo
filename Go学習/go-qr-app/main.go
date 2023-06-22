@@ -9,8 +9,8 @@ import (
 	"go-qr-app/qrgen"
 )
 
-
 func main() {
+	outputPath := flag.String("o", "./image.png", "Path to output file")
 	flag.Parse()
 	url := flag.Arg(0)
 	if url == ""{
@@ -18,7 +18,9 @@ func main() {
 		return
 	}
 
-	file, err := os.Create("./qr.png")
+	// note
+	// outputPathが*なのは、上記のflag.Stringの戻り値がポインターだから
+	file, err := os.Create(*outputPath)
 	if err != nil {
 		fmt.Printf("file generation failed: %v\n", err)
 		return
